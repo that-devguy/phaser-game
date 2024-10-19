@@ -29,28 +29,90 @@ export default class GameScene extends Phaser.Scene {
     // Add the background
     this.add.image(400, 300, "background");
 
+    // Add idle animations
     this.anims.create({
-      key: "idle_down",
+      key: "idle_up",
       frames: this.anims.generateFrameNumbers("player_idle", {
         start: 0,
-        end: 5,
+        end: 7,
       }),
       frameRate: 5,
       repeat: -1,
     });
 
     this.anims.create({
-      key: "walk_down",
+      key: "idle_down",
+      frames: this.anims.generateFrameNumbers("player_idle", {
+        start: 8,
+        end: 15,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "idle_left",
+      frames: this.anims.generateFrameNumbers("player_idle", {
+        start: 16,
+        end: 23,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "idle_right",
+      frames: this.anims.generateFrameNumbers("player_idle", {
+        start: 24,
+        end: 31,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    // Add walking animations
+    this.anims.create({
+      key: "walk_up",
       frames: this.anims.generateFrameNumbers("player_walk", {
         start: 0,
-        end: 5,
+        end: 7,
       }),
       frameRate: 10,
       repeat: -1,
     });
 
+    this.anims.create({
+      key: "walk_down",
+      frames: this.anims.generateFrameNumbers("player_walk", {
+        start: 8,
+        end: 110,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "walk_left",
+      frames: this.anims.generateFrameNumbers("player_walk", {
+        start: 16,
+        end: 23,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });gi
+
+    this.anims.create({
+      key: "walk_right",
+      frames: this.anims.generateFrameNumbers("player_idle", {
+        start: 24,
+        end: 31,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
     // Add the player sprite
-    this.player = new player_idle(this, 400, 300);
+    this.player = new Player(this, 400, 300);
 
     // Set player movement
     // Keybindings for WASD movement
