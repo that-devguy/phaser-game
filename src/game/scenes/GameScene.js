@@ -6,16 +6,22 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    // Load default player sprite
-    this.load.image(
-      "player",
-      "https://labs.phaser.io/assets/sprites/phaser-dude.png"
-    );
     // Load default game background
     this.load.image(
       "background",
       "https://labs.phaser.io/assets/skies/space3.png"
     );
+
+    // Load animated player sprite sheets
+    this.load.spritesheet("player_idle", "src/assets/images/hero_idle.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("player_walk", "src/assets/images/hero_walk.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
   }
 
   create() {
@@ -23,8 +29,28 @@ export default class GameScene extends Phaser.Scene {
     // Add the background
     this.add.image(400, 300, "background");
 
+    this.anims.create({
+      key: "idle_down",
+      frames: this.anims.generateFrameNumbers("player_idle", {
+        start: 0,
+        end: 5,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "walk_down",
+      frames: this.anims.generateFrameNumbers("player_walk", {
+        start: 0,
+        end: 5,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
     // Add the player sprite
-    this.player = new Player(this, 400, 300);
+    this.player = new player_idle(this, 400, 300);
 
     // Set player movement
     // Keybindings for WASD movement
