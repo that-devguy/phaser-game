@@ -13,19 +13,24 @@ export default class GameScene extends Phaser.Scene {
     );
 
     // Load animated player sprite sheets
-    this.load.spritesheet("player_idle", "src/assets/images/hero_idle.png", {
+    this.load.spritesheet("player_idle", "assets/images/hero_idle.png", {
       frameWidth: 16,
       frameHeight: 16,
+      margin: 32,
+      spacing: 64,
     });
+    console.log("player_idle sprite sheet loaded");
 
-    this.load.spritesheet("player_walk", "src/assets/images/hero_walk.png", {
+    this.load.spritesheet("player_walk", "assets/images/hero_walk.png", {
       frameWidth: 16,
       frameHeight: 16,
+      margin: 32,
+      spacing: 64,
     });
+    console.log("player_walk sprite sheet loaded");
   }
 
   create() {
-    // Phaser's add.image() adds an image to the game world. The first two parameters are the x and y coordinates.
     // Add the background
     this.add.image(400, 300, "background");
 
@@ -34,7 +39,7 @@ export default class GameScene extends Phaser.Scene {
       key: "idle_up",
       frames: this.anims.generateFrameNumbers("player_idle", {
         start: 0,
-        end: 7,
+        end: 5,
       }),
       frameRate: 5,
       repeat: -1,
@@ -43,8 +48,8 @@ export default class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "idle_down",
       frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 8,
-        end: 15,
+        start: 6,
+        end: 11,
       }),
       frameRate: 5,
       repeat: -1,
@@ -53,8 +58,8 @@ export default class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "idle_left",
       frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 16,
-        end: 23,
+        start: 12,
+        end: 17,
       }),
       frameRate: 5,
       repeat: -1,
@@ -63,8 +68,8 @@ export default class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "idle_right",
       frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 24,
-        end: 31,
+        start: 18,
+        end: 23,
       }),
       frameRate: 5,
       repeat: -1,
@@ -75,7 +80,7 @@ export default class GameScene extends Phaser.Scene {
       key: "walk_up",
       frames: this.anims.generateFrameNumbers("player_walk", {
         start: 0,
-        end: 7,
+        end: 5,
       }),
       frameRate: 10,
       repeat: -1,
@@ -84,8 +89,8 @@ export default class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "walk_down",
       frames: this.anims.generateFrameNumbers("player_walk", {
-        start: 8,
-        end: 110,
+        start: 6,
+        end: 11,
       }),
       frameRate: 10,
       repeat: -1,
@@ -94,27 +99,27 @@ export default class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "walk_left",
       frames: this.anims.generateFrameNumbers("player_walk", {
-        start: 16,
+        start: 12,
+        end: 17,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "walk_right",
+      frames: this.anims.generateFrameNumbers("player_walk", {
+        start: 18,
         end: 23,
       }),
       frameRate: 10,
       repeat: -1,
-    });gi
-
-    this.anims.create({
-      key: "walk_right",
-      frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 24,
-        end: 31,
-      }),
-      frameRate: 5,
-      repeat: -1,
     });
 
     // Add the player sprite
-    this.player = new Player(this, 400, 300);
+    this.player = new Player(this, 400, 300).play("idle_down");
+    this.player.setScale(3);
 
-    // Set player movement
     // Keybindings for WASD movement
     this.keys = this.input.keyboard.addKeys({
       w: Phaser.Input.Keyboard.KeyCodes.W,
@@ -125,6 +130,6 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update() {
-    this.player.handleMovement(this.keys); // This delegates movement logic to the player entity
+    this.player.handleMovement(this.keys); // Delegate movement logic to the player entity
   }
 }
