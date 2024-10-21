@@ -6,29 +6,36 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    // Load default game background
-    this.load.image(
-      "background",
-      "https://labs.phaser.io/assets/skies/space3.png"
-    );
-
+    // Load test map sprite sheet & tiled map
     this.load.image("tiles", "assets/images/demo_tiles.png");
     this.load.tilemapTiledJSON("mapKey", "assets/maps/test_map.json");
 
     // Load animated player sprite sheets
     this.load.spritesheet("player_idle", "assets/images/hero_idle.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-      margin: 32,
-      spacing: 64,
+      frameWidth: 32,
+      frameHeight: 32,
+      margin: 24,
+      spacing: 48,
     });
 
     this.load.spritesheet("player_walk", "assets/images/hero_walk.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-      margin: 32,
-      spacing: 64,
+      frameWidth: 32,
+      frameHeight: 32,
+      margin: 24,
+      spacing: 48,
     });
+
+    // Load animated player 1h attack sprite sheet
+    this.load.spritesheet(
+      "player_1h_attack",
+      "assets/images/hero_1h_attack.png",
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+        margin: 24,
+        spacing: 48,
+      }
+    );
   }
 
   create() {
@@ -131,6 +138,47 @@ export default class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
+    // Add 1h attacking animations
+    this.anims.create({
+      key: "attack_up",
+      frames: this.anims.generateFrameNumbers("player_1h_attack", {
+        start: 0,
+        end: 8,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "attack_down",
+      frames: this.anims.generateFrameNumbers("player_1h_attack", {
+        start: 9,
+        end: 17,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "attack_left",
+      frames: this.anims.generateFrameNumbers("player_1h_attack", {
+        start: 18,
+        end: 26,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "attack_right",
+      frames: this.anims.generateFrameNumbers("player_1h_attack", {
+        start: 27,
+        end: 35,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
     // Add the player sprite
     this.player = new Player(this, 120, 88).play("idle_down");
     this.player.setScale(1);
@@ -150,6 +198,13 @@ export default class GameScene extends Phaser.Scene {
       a: Phaser.Input.Keyboard.KeyCodes.A,
       s: Phaser.Input.Keyboard.KeyCodes.S,
       d: Phaser.Input.Keyboard.KeyCodes.D,
+    });
+
+    // Left-click attack handler
+    this.input.on("pointerdown", (pointer) => {
+      if (pointer.leftButtonDown()) {
+        this.player.handleAttack(pointer, this.keys);
+      }
     });
   }
 

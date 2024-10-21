@@ -21,8 +21,8 @@ const GameComponent = () => {
         },
         scene: [GameScene], // Imports the GameScene
         scale: {
-            zoom: 4 // Scale the game size for 16x16 sprites
-        }
+          zoom: 4, // Scale the game size for 16x16 sprites
+        },
       };
 
       const game = new Phaser.Game(config);

@@ -5,13 +5,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.speed = 1;
+    this.speed = 60;
 
     this.body.setSize(4, 4); // Set the player's physics body to match the sprite
     this.body.setOffset(6, 12); // Adjust the x and y offset for the collision box relative to the player
   }
 
+  // MOVEMENT
   handleMovement(keys) {
+    // If attacking, don't allow movement
+    if (this.isAttacking) return;
+
     // Reset velocity
     this.setVelocity(0);
     let moving = false;
@@ -85,5 +89,39 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Normalize movement for smoother diagonal movement
     normalizeMovement(this.body.velocity);
+  }
+
+  // ATTACK
+  handleAttack(pointer, keys) {
+    // Defines attack state so that we can block movement
+    this.isAttacking = true;
+
+    const playerX = this.x;
+    const playerY = this.y;
+    const mouseX = pointer.worldX;
+    const mouseY = pointer.worldY;
+
+    // Calculate the angle between player and mouse
+    const angle = Phaser.Math.Angle.Between(playerX, playerY, mouseX, mouseY);
+
+    // Calculate direction based on angle (8-directional logic)
+    if (angle >= -Math.PI / 4 && angle < Math.PI / 4) {
+      this.anims.play("attack_right", true);
+    } else if (angle >= Math.PI / 4 && angle < (3 * Math.PI) / 4) {
+      this.anims.play("attack_down", true);
+    } else if (angle >= (-3 * Math.PI) / 4 && angle < -Math.PI / 4) {
+      this.anims.play("attack_up", true);
+    } else {
+      this.anims.play("attack_left", true);
+    }
+
+    // Stop player movement during attack animation
+    this.setVelocity(0);
+
+    this.once("animationcomplete", (anim) => {
+      this.isAttacking = false; //Reset attack state
+
+      this.handleMovement(keys);
+    });
   }
 }
