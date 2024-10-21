@@ -12,6 +12,9 @@ export default class GameScene extends Phaser.Scene {
       "https://labs.phaser.io/assets/skies/space3.png"
     );
 
+    this.load.image("tiles", "assets/images/demo_tiles.png");
+    this.load.tilemapTiledJSON("mapKey", "assets/maps/test_map.json");
+
     // Load animated player sprite sheets
     this.load.spritesheet("player_idle", "assets/images/hero_idle.png", {
       frameWidth: 16,
@@ -19,7 +22,6 @@ export default class GameScene extends Phaser.Scene {
       margin: 32,
       spacing: 64,
     });
-    console.log("player_idle sprite sheet loaded");
 
     this.load.spritesheet("player_walk", "assets/images/hero_walk.png", {
       frameWidth: 16,
@@ -27,13 +29,26 @@ export default class GameScene extends Phaser.Scene {
       margin: 32,
       spacing: 64,
     });
-    console.log("player_walk sprite sheet loaded");
   }
 
   create() {
-    // Add the background
-    this.add.image(400, 300, "background");
+    // MAP
+    // Add map and tileset
+    const map = this.make.tilemap({ key: "mapKey" });
+    const tileset = map.addTilesetImage("test_map", "tiles"); // Replace with your tileset name
+    const groundLayer = map.createLayer("Tile Layer 1", tileset, 0, 0); // Layer 1
+    const detailsLayer = map.createLayer("Tile Layer 2", tileset, 0, 0); // Layer 2
+    const collisionLayer = map.createLayer("Tile Layer 3", tileset, 0, 0); // Collision layer
+    const detailsLayer2 = map.createLayer("Tile Layer 4", tileset, 0, 0); // Layer 4
+    const overlayLayer = map.createLayer("Tile Layer 5", tileset, 0, 0); // Layer that displays any assets over the sprite
 
+    // Set the depth for the overlay layer above the player sprite
+    overlayLayer.setDepth(10);
+
+    // Enables collision detection on the collision layer
+    collisionLayer.setCollisionByProperty({ collides: true });
+
+    // PLAYER
     // Add idle animations
     this.anims.create({
       key: "idle_up",
@@ -117,8 +132,17 @@ export default class GameScene extends Phaser.Scene {
     });
 
     // Add the player sprite
-    this.player = new Player(this, 400, 300).play("idle_down");
-    this.player.setScale(3);
+    this.player = new Player(this, 120, 88).play("idle_down");
+    this.player.setScale(1);
+    this.physics.add.collider(this.player, collisionLayer);
+
+    // Visualize collision tiles
+    // const viewCollisionTiles = this.add.graphics().setAlpha(0.5);
+    // collisionLayer.renderDebug(viewCollisionTiles, {
+    //   tileColor: null,
+    //   collidingTileColor: new Phaser.Display.Color(255, 10, 40, 255), // Highlight collidable tiles
+    //   faceColor: null,
+    // });
 
     // Keybindings for WASD movement
     this.keys = this.input.keyboard.addKeys({
@@ -130,6 +154,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update() {
-    this.player.handleMovement(this.keys); // Delegate movement logic to the player entity
+    // Delegate movement logic to the player entity
+    this.player.handleMovement(this.keys);
   }
 }

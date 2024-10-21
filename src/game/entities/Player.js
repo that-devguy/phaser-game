@@ -5,7 +5,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.speed = 160;
+    this.speed = 1;
+
+    this.body.setSize(4, 4); // Set the player's physics body to match the sprite
+    this.body.setOffset(6, 12); // Adjust the x and y offset for the collision box relative to the player
   }
 
   handleMovement(keys) {
@@ -17,22 +20,22 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (keys.w.isDown && keys.a.isDown) {
       this.setVelocityY(-this.speed);
       this.setVelocityX(-this.speed);
-      this.anims.play("walk_up", true); // Play up animation for up-left
+      this.anims.play("walk_left", true); // Play up animation for up-left
       moving = true;
     } else if (keys.w.isDown && keys.d.isDown) {
       this.setVelocityY(-this.speed);
       this.setVelocityX(this.speed);
-      this.anims.play("walk_up", true); // Play up animation for up-right
+      this.anims.play("walk_right", true); // Play up animation for up-right
       moving = true;
     } else if (keys.s.isDown && keys.a.isDown) {
       this.setVelocityY(this.speed);
       this.setVelocityX(-this.speed);
-      this.anims.play("walk_down", true); // Play down animation for down-left
+      this.anims.play("walk_left", true); // Play down animation for down-left
       moving = true;
     } else if (keys.s.isDown && keys.d.isDown) {
       this.setVelocityY(this.speed);
       this.setVelocityX(this.speed);
-      this.anims.play("walk_down", true); // Play down animation for down-right
+      this.anims.play("walk_right", true); // Play down animation for down-right
       moving = true;
     }
 

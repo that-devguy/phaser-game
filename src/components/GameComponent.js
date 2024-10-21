@@ -9,8 +9,8 @@ const GameComponent = () => {
       // Phaser game configuration object. This sets up the basic game properties
       const config = {
         type: Phaser.AUTO, // This sets Phaser to automatically use WebGL if available, otherwise it falls back to Canvas.
-        width: 800,
-        height: 600,
+        width: 240,
+        height: 176,
         parent: "phaser-game", // DOM element ID where the game will be rendered
         physics: {
           default: "arcade",
@@ -20,6 +20,9 @@ const GameComponent = () => {
           },
         },
         scene: [GameScene], // Imports the GameScene
+        scale: {
+            zoom: 4 // Scale the game size for 16x16 sprites
+        }
       };
 
       const game = new Phaser.Game(config);
