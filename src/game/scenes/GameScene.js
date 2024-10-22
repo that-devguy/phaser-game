@@ -36,6 +36,17 @@ export default class GameScene extends Phaser.Scene {
         spacing: 48,
       }
     );
+
+    this.load.spritesheet(
+      "1h_sword_attack",
+      "assets/images/hero_1h_sword.png",
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+        margin: 24,
+        spacing: 48,
+      }
+    );
   }
 
   create() {
@@ -172,6 +183,47 @@ export default class GameScene extends Phaser.Scene {
     this.anims.create({
       key: "attack_right",
       frames: this.anims.generateFrameNumbers("player_1h_attack", {
+        start: 27,
+        end: 35,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
+    // Add 1h sword attacking animations
+    this.anims.create({
+      key: "1h_sword_attack_up",
+      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
+        start: 0,
+        end: 8,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "1h_sword_attack_down",
+      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
+        start: 9,
+        end: 17,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "1h_sword_attack_left",
+      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
+        start: 18,
+        end: 26,
+      }),
+      frameRate: 16,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "1h_sword_attack_right",
+      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
         start: 27,
         end: 35,
       }),
