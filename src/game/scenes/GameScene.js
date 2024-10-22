@@ -184,12 +184,17 @@ export default class GameScene extends Phaser.Scene {
     this.player.setScale(1);
     this.physics.add.collider(this.player, collisionLayer);
 
-    // Visualize collision tiles
+    // // Visualize collision tiles
     // const viewCollisionTiles = this.add.graphics().setAlpha(0.5);
     // collisionLayer.renderDebug(viewCollisionTiles, {
     //   tileColor: null,
     //   collidingTileColor: new Phaser.Display.Color(255, 10, 40, 255), // Highlight collidable tiles
     //   faceColor: null,
+    // });
+
+    // // Create a graphics object to draw the player's collision area
+    // this.collisionGraphics = this.add.graphics({
+    //   fillStyle: { color: 0xff0000, alpha: 0.5 }, // Red fill, 50% opacity
     // });
 
     // Keybindings for WASD movement
@@ -211,5 +216,18 @@ export default class GameScene extends Phaser.Scene {
   update() {
     // Delegate movement logic to the player entity
     this.player.handleMovement(this.keys);
+
+    // // Update and redraw player collision box while the player is moving
+    // // Clear any previous graphics drawings
+    // this.collisionGraphics.clear();
+
+    // // Draw a red filled circle over the player's physics body (with 50% opacity)
+    // this.collisionGraphics.fillStyle(0xff0000, 0.5);
+    // this.collisionGraphics.fillEllipse(
+    //   this.player.body.x + this.player.body.width / 2,
+    //   this.player.body.y + this.player.body.height / 2,
+    //   this.player.body.width,
+    //   this.player.body.height
+    // );
   }
 }
