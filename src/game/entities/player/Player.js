@@ -1,4 +1,5 @@
-import { normalizeMovement } from "../utils/MovementUtils";
+import { normalizeMovement } from "../../utils/movementUtils";
+import { createPlayerAnimations } from "./playerAnimations";
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -9,6 +10,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.body.setSize(8, 6); // Set the player's physics body to match the sprite
     this.body.setOffset(12, 18); // Adjust the x and y offset for the collision box relative to the player
+
+    // Initialize player animations
+    createPlayerAnimations(scene);
   }
 
   // MOVEMENT
@@ -120,7 +124,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.once("animationcomplete", (anim) => {
       this.isAttacking = false; //Reset attack state
-
       this.handleMovement(keys);
     });
   }

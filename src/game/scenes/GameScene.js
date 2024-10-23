@@ -1,253 +1,43 @@
-import Player from "../entities/Player";
+import { playerAssets } from "../entities/player/playerAssets";
+import Player from "../entities/player/Player";
+import { loadAnimations } from "../systems/animations/animationLoader";
+import { setupTestMap } from "../systems/mapSetup/testMap";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: "GameScene" });
+
+    // Flag for toggling collision box visibility
+    this.showCollisionBoxes = false;
   }
 
   preload() {
     // Load test map sprite sheet & tiled map
-    this.load.image("tiles", "assets/images/demo_tiles.png");
-    this.load.tilemapTiledJSON("mapKey", "assets/maps/test_map.json");
+    this.load.image("tiles", "assets/sprites/maps/demo_tiles.png");
+    this.load.tilemapTiledJSON("testMap", "assets/maps/test_map.json");
 
-    // Load animated player sprite sheets
-    this.load.spritesheet("player_idle", "assets/images/hero_idle.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-      margin: 24,
-      spacing: 48,
+    // Load player sprite sheets
+    Object.values(playerAssets).forEach((asset) => {
+      this.load.spritesheet(asset.key, asset.path, {
+        frameWidth: asset.frameWidth,
+        frameHeight: asset.frameHeight,
+        margin: asset.margin,
+        spacing: asset.spacing,
+      });
     });
-
-    this.load.spritesheet("player_walk", "assets/images/hero_walk.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-      margin: 24,
-      spacing: 48,
-    });
-
-    // Load animated player 1h attack sprite sheet
-    this.load.spritesheet(
-      "player_1h_attack",
-      "assets/images/hero_1h_attack.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
-        margin: 24,
-        spacing: 48,
-      }
-    );
-
-    this.load.spritesheet(
-      "1h_sword_attack",
-      "assets/images/hero_1h_sword.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
-        margin: 24,
-        spacing: 48,
-      }
-    );
   }
 
   create() {
-    // MAP
-    // Add map and tileset
-    const map = this.make.tilemap({ key: "mapKey" });
-    const tileset = map.addTilesetImage("test_map", "tiles"); // Replace with your tileset name
-    const groundLayer = map.createLayer("Tile Layer 1", tileset, 0, 0); // Layer 1
-    const detailsLayer = map.createLayer("Tile Layer 2", tileset, 0, 0); // Layer 2
-    const collisionLayer = map.createLayer("Tile Layer 3", tileset, 0, 0); // Collision layer
-    const detailsLayer2 = map.createLayer("Tile Layer 4", tileset, 0, 0); // Layer 4
-    const overlayLayer = map.createLayer("Tile Layer 5", tileset, 0, 0); // Layer that displays any assets over the sprite
+    // Load animations into scene
+    loadAnimations(this);
 
-    // Set the depth for the overlay layer above the player sprite
-    overlayLayer.setDepth(10);
-
-    // Enables collision detection on the collision layer
-    collisionLayer.setCollisionByProperty({ collides: true });
-
-    // PLAYER
-    // Add idle animations
-    this.anims.create({
-      key: "idle_up",
-      frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 0,
-        end: 5,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "idle_down",
-      frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 6,
-        end: 11,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "idle_left",
-      frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 12,
-        end: 17,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "idle_right",
-      frames: this.anims.generateFrameNumbers("player_idle", {
-        start: 18,
-        end: 23,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
-
-    // Add walking animations
-    this.anims.create({
-      key: "walk_up",
-      frames: this.anims.generateFrameNumbers("player_walk", {
-        start: 0,
-        end: 5,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "walk_down",
-      frames: this.anims.generateFrameNumbers("player_walk", {
-        start: 6,
-        end: 11,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "walk_left",
-      frames: this.anims.generateFrameNumbers("player_walk", {
-        start: 12,
-        end: 17,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "walk_right",
-      frames: this.anims.generateFrameNumbers("player_walk", {
-        start: 18,
-        end: 23,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    // Add 1h attacking animations
-    this.anims.create({
-      key: "attack_up",
-      frames: this.anims.generateFrameNumbers("player_1h_attack", {
-        start: 0,
-        end: 8,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "attack_down",
-      frames: this.anims.generateFrameNumbers("player_1h_attack", {
-        start: 9,
-        end: 17,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "attack_left",
-      frames: this.anims.generateFrameNumbers("player_1h_attack", {
-        start: 18,
-        end: 26,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "attack_right",
-      frames: this.anims.generateFrameNumbers("player_1h_attack", {
-        start: 27,
-        end: 35,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
-
-    // Add 1h sword attacking animations
-    this.anims.create({
-      key: "1h_sword_attack_up",
-      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
-        start: 0,
-        end: 8,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "1h_sword_attack_down",
-      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
-        start: 9,
-        end: 17,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "1h_sword_attack_left",
-      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
-        start: 18,
-        end: 26,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "1h_sword_attack_right",
-      frames: this.anims.generateFrameNumbers("1h_sword_attack", {
-        start: 27,
-        end: 35,
-      }),
-      frameRate: 16,
-      repeat: 0,
-    });
+    // Set up map
+    this.map = setupTestMap(this);
 
     // Add the player sprite
     this.player = new Player(this, 120, 88).play("idle_down");
     this.player.setScale(1);
-    this.physics.add.collider(this.player, collisionLayer);
-
-    // // Visualize collision tiles
-    // const viewCollisionTiles = this.add.graphics().setAlpha(0.5);
-    // collisionLayer.renderDebug(viewCollisionTiles, {
-    //   tileColor: null,
-    //   collidingTileColor: new Phaser.Display.Color(255, 10, 40, 255), // Highlight collidable tiles
-    //   faceColor: null,
-    // });
-
-    // // Create a graphics object to draw the player's collision area
-    // this.collisionGraphics = this.add.graphics({
-    //   fillStyle: { color: 0xff0000, alpha: 0.5 }, // Red fill, 50% opacity
-    // });
+    this.physics.add.collider(this.player, this.collisionLayer);
 
     // Keybindings for WASD movement
     this.keys = this.input.keyboard.addKeys({
@@ -263,23 +53,57 @@ export default class GameScene extends Phaser.Scene {
         this.player.handleAttack(pointer, this.keys);
       }
     });
+
+    // Toggle hotkey for collision box visibility
+    this.toggleCollisionBoxes = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.C
+    );
+
+    // Create a graphics object to draw the maps's collision tiles
+    this.viewCollisionTiles = this.add.graphics({
+      fillStyle: { color: 0xff0000, alpha: 0.5 },
+    });
+
+    // Create a graphics object to draw the player's collision area
+    this.collisionGraphics = this.add.graphics({
+      fillStyle: { color: 0xff0000, alpha: 0.5 },
+    });
   }
 
   update() {
     // Delegate movement logic to the player entity
     this.player.handleMovement(this.keys);
 
-    // // Update and redraw player collision box while the player is moving
-    // // Clear any previous graphics drawings
-    // this.collisionGraphics.clear();
+    // Check for showCollisionBoxes toggle
+    if (Phaser.Input.Keyboard.JustDown(this.toggleCollisionBoxes)) {
+      this.showCollisionBoxes = !this.showCollisionBoxes;
+    }
 
-    // // Draw a red filled circle over the player's physics body (with 50% opacity)
-    // this.collisionGraphics.fillStyle(0xff0000, 0.5);
-    // this.collisionGraphics.fillEllipse(
-    //   this.player.body.x + this.player.body.width / 2,
-    //   this.player.body.y + this.player.body.height / 2,
-    //   this.player.body.width,
-    //   this.player.body.height
-    // );
+    // If showCollisionBoxes is true, render map collision boxes
+    if (this.showCollisionBoxes) {
+      this.collisionLayer.renderDebug(this.viewCollisionTiles, {
+        tileColor: null,
+        collidingTileColor: new Phaser.Display.Color(255, 10, 40, 128), // Highlight collidable tiles
+        faceColor: null,
+      });
+    } else {
+      this.viewCollisionTiles.clear();
+    }
+
+    // Update and redraw player collision box while the player is moving
+    // Clear any previous graphics drawings
+    this.collisionGraphics.clear();
+
+    // If showCollisionBoxes is true, render player collision boxes
+    if (this.showCollisionBoxes) {
+      // Draw a red filled circle over the player's physics body (with 50% opacity)
+      this.collisionGraphics.fillStyle(0xff0000, 0.5);
+      this.collisionGraphics.fillEllipse(
+        this.player.body.x + this.player.body.width / 2,
+        this.player.body.y + this.player.body.height / 2,
+        this.player.body.width,
+        this.player.body.height
+      );
+    }
   }
 }
