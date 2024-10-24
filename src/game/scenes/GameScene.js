@@ -1,6 +1,5 @@
 import { playerAssets } from "../entities/player/playerAssets";
 import Player from "../entities/player/Player";
-import { loadAnimations } from "../systems/animations/animationLoader";
 import { setupTestMap } from "../systems/mapSetup/testMap";
 import {
   setupCollisionDebug,
@@ -32,9 +31,6 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // Load animations into scene
-    loadAnimations(this);
-
     // Set up map
     this.map = setupTestMap(this);
 

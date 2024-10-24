@@ -26,9 +26,9 @@ export const playerAssets = {
   swordAttack: {
     key: "1h_sword_attack",
     path: "assets/sprites/player/hero_1h_sword.png",
-    frameWidth: 32,
-    frameHeight: 32,
-    margin: 24,
-    spacing: 48,
+    frameWidth: 48,
+    frameHeight: 48,
+    margin: 16,
+    spacing: 32,
   },
 };

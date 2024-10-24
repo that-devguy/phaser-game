@@ -8,6 +8,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     this.speed = 60;
 
+    // Initialize the sword sprite but don't display it yet
+    this.sword = scene.add.sprite(x, y, "player_sword").setVisible(false);
+
     this.body.setSize(8, 6); // Set the player's physics body to match the sprite
     this.body.setOffset(12, 18); // Adjust the x and y offset for the collision box relative to the player
 
@@ -97,6 +100,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   // ATTACK
   handleAttack(pointer, keys) {
+    // Prevent new attack input if already attacking
+    if (this.isAttacking) return;
+
     // Defines attack state so that we can block movement
     this.isAttacking = true;
 
@@ -108,26 +114,39 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     // Calculate the angle between player and mouse
     const angle = Phaser.Math.Angle.Between(playerX, playerY, mouseX, mouseY);
 
+    let swordAnimKey = "";
+
     // Calculate direction based on angle (8-directional logic)
     if (angle >= -Math.PI / 4 && angle < Math.PI / 4) {
       this.anims.play("attack_right", true);
+      swordAnimKey = "1h_sword_attack_right";
       this.lastDirection = "right";
     } else if (angle >= Math.PI / 4 && angle < (3 * Math.PI) / 4) {
       this.anims.play("attack_down", true);
-      this.lastDirection = "down"; 
+      swordAnimKey = "1h_sword_attack_down";
+      this.lastDirection = "down";
     } else if (angle >= (-3 * Math.PI) / 4 && angle < -Math.PI / 4) {
       this.anims.play("attack_up", true);
-      this.lastDirection = "up"; 
+      swordAnimKey = "1h_sword_attack_up";
+      this.lastDirection = "up";
     } else {
       this.anims.play("attack_left", true);
-      this.lastDirection = "left"; 
+      swordAnimKey = "1h_sword_attack_left";
+      this.lastDirection = "left";
     }
+
+    // Show sword sprite during attack
+    this.sword.setPosition(this.x, this.y).setVisible(true);
+    this.sword.play(swordAnimKey); // Play the same animation as the player
 
     // Stop player movement during attack animation
     this.setVelocity(0);
 
     this.once("animationcomplete", (anim) => {
       this.isAttacking = false; // Reset attack state
+
+      // Hide sword after the animation
+      this.sword.setVisible(false);
 
       // If no movement keys are pressed, resume the idle animation based on the last direction
       if (
