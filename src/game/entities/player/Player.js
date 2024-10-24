@@ -111,20 +111,49 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     // Calculate direction based on angle (8-directional logic)
     if (angle >= -Math.PI / 4 && angle < Math.PI / 4) {
       this.anims.play("attack_right", true);
+      this.lastDirection = "right";
     } else if (angle >= Math.PI / 4 && angle < (3 * Math.PI) / 4) {
       this.anims.play("attack_down", true);
+      this.lastDirection = "down"; 
     } else if (angle >= (-3 * Math.PI) / 4 && angle < -Math.PI / 4) {
       this.anims.play("attack_up", true);
+      this.lastDirection = "up"; 
     } else {
       this.anims.play("attack_left", true);
+      this.lastDirection = "left"; 
     }
 
     // Stop player movement during attack animation
     this.setVelocity(0);
 
     this.once("animationcomplete", (anim) => {
-      this.isAttacking = false; //Reset attack state
-      this.handleMovement(keys);
+      this.isAttacking = false; // Reset attack state
+
+      // If no movement keys are pressed, resume the idle animation based on the last direction
+      if (
+        !keys.w.isDown &&
+        !keys.a.isDown &&
+        !keys.s.isDown &&
+        !keys.d.isDown
+      ) {
+        switch (this.lastDirection) {
+          case "right":
+            this.anims.play("idle_right");
+            break;
+          case "down":
+            this.anims.play("idle_down");
+            break;
+          case "up":
+            this.anims.play("idle_up");
+            break;
+          case "left":
+            this.anims.play("idle_left");
+            break;
+        }
+      } else {
+        // Otherwise, resume movement if any key is pressed
+        this.handleMovement(keys);
+      }
     });
   }
 }
