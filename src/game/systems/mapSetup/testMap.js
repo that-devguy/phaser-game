@@ -23,9 +23,7 @@ export function setupTestMap(scene) {
   });
 
   // Enables collision detection on the collision layer
-  if (scene.collisionLayer) {
-    scene.collisionLayer.setCollisionByProperty({ collides: true });
-  }
+  scene.collisionLayer.setCollisionByProperty({ collides: true });
 
   return map;
 }

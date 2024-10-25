@@ -35,9 +35,20 @@ export default class GameScene extends Phaser.Scene {
     this.map = setupTestMap(this);
 
     // Add the player sprite
-    this.player = new Player(this, 120, 88).play("idle_down");
+    this.player = new Player(this, 55, 55).play("idle_down");
     this.player.setScale(1);
     this.physics.add.collider(this.player, this.collisionLayer);
+
+    // Set camera to follow the player
+    this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
+
+    // Set camera map boundaries
+    this.cameras.main.setBounds(
+      0,
+      0,
+      this.map.widthInPixels,
+      this.map.heightInPixels
+    );
 
     // Keybindings for WASD movement
     this.keys = this.input.keyboard.addKeys({
