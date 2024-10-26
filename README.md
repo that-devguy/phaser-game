@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Phaser Game - Archived
 
-## Getting Started
+## 🚨 Important Notice: Project Transitioned to Godot 🚨
 
-First, run the development server:
+Thank you for visiting this repository! This project initially began as a Phaser.js game, but development has now moved to [Godot](https://godotengine.org/). Due to the potential for more advanced features and a streamlined development experience, Godot became the preferred engine for further work on this project.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Archived Status
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **This repository is archived** and will no longer receive updates or new commits.
+- **All future development, updates, and new features** will be available in the new repository created for the Godot version.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Reason for the Transition
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+The move to Godot was inspired by:
 
-## Learn More
+- Enhanced support for complex game mechanics
+- Built-in support for advanced 2D/3D capabilities
+- A more intuitive interface for scene and asset management
 
-To learn more about Next.js, take a look at the following resources:
+### New Repository
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can find the latest code, updates, and progress on the game in the new Godot repository here:
+[**Godot RPG Repository**](https://github.com/that-devguy/godot-rpg)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Legacy Code
 
-## Deploy on Vercel
+The code here remains accessible for anyone interested in the initial Phaser.js implementation or for those who want to see the progression from Phaser.js to Godot. However, please note that the Phaser.js version will no longer be maintained.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Thank you for your interest and support in this project!
