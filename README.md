@@ -20,7 +20,7 @@ The move to Godot was inspired by:
 ### New Repository
 
 You can find the latest code, updates, and progress on the game in the new Godot repository here:
-[**Godot RPG Repository**](https://github.com/that-devguy/godot-rpg)
+[**Godot RPG**](https://github.com/that-devguy/godot-rpg)
 
 ### Legacy Code
 
